@@ -234,7 +234,7 @@
         "subnet2Ref": "[concat(variables('vnetID'),'/subnets/', parameters('Subnet2Name'))]",
         "subnet3Ref": "[concat(variables('vnetID'),'/subnets/', parameters('Subnet3Name'))]",
         "nsgname": "[concat(parameters('vmName'),'-SSH-SecurityGroup')]",
-        "apiVer": "2015-06-15",
+        "apiVer": "2015-05-01-preview",
         "publicIPAddressType": "Dynamic",
         "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
         "storageAccountSetupURL": "[concat(parameters('baseUrl'),'/storageAccount-',parameters('storageAccountNewOrExisting'),'.json')]",
@@ -266,7 +266,7 @@
         {
             "name": "SettingUpStorageAccount",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
+            "apiVersion": "2015-05-01-preview",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -304,7 +304,7 @@
         {
             "name": "SettingUpPublicIP",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
+            "apiVersion": "2015-05-01-preview",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -374,7 +374,7 @@
         {
             "name": "SettingUpVirtualNetwork",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
+            "apiVersion": "2015-05-01-preview",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
