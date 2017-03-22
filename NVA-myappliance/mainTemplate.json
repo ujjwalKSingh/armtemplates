@@ -228,7 +228,7 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('location')]"
                     },
                     "storageAccountType": {
                         "value": "[parameters('storageAccountType')]"
@@ -246,7 +246,7 @@
           "apiVersion": "2015-06-15",
           "type": "Microsoft.Network/publicIPAddresses",
           "name": "[parameters('publicIPAddressName')]",
-          "location": "[resourceGroup().location]",
+          "location": "[parameters('location')]",
           "properties": {
                 "publicIPAllocationMethod": "Dynamic",
                 "dnsRecord": {
@@ -266,7 +266,7 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('location')]"
                     },
                     "publicIPAddressName": {
                         "value": "[parameters('publicIPAddressName')]"
@@ -290,7 +290,7 @@
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[concat(parameters('vmName'),'-SSH-SecurityGroup')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "properties": {
                 "securityRules": [
                     {
@@ -339,7 +339,7 @@
                         "value": "[parameters('virtualNetworkName')]"
                     },
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('location')]"
                     },
                     "virtualNetworkAddressPrefix": {
                         "value": "[parameters('virtualNetworkAddressPrefix')]"
@@ -372,7 +372,7 @@
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[concat(parameters('vmName'),'-Nic0')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Resources/deployments/', 'SettingUpVirtualNetwork')]",
                 "[concat('Microsoft.Network/networkSecurityGroups/',variables('nsgname'))]",
@@ -404,7 +404,7 @@
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[concat(parameters('vmName'),'-Nic1')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Resources/deployments/', 'SettingUpVirtualNetwork')]"
             ],
@@ -428,7 +428,7 @@
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[concat(parameters('vmName'),'-Nic2')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Resources/deployments/', 'SettingUpVirtualNetwork')]"
             ],
@@ -452,7 +452,7 @@
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[parameters('vmName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "plan": {
                 "name": "SDWAN_name",
                 "publisher": "citrix",
