@@ -30,9 +30,26 @@
             "label": "Username",
             "toolTip": "Admin username for the virtual machines. The OpsCenter username is 'admin'.",
             "osPlatform": "Linux"
-          }         
+          },
+          {
+          "name": "SSHCredentials",
+          "type": "Microsoft.Compute.CredentialsCombo",
+          "label": {
+              "password": "Password",
+              "confirmPassword": "Confirm password"
+          },
+          "toolTip": {
+              "password": "Password for the Virtual Machine"
+          },
+          "constraints": {
+              "required": true
+          },
+          "options": {
+              "hideConfirmation": false
+          },
+          "osPlatform": "Windows"
+        }         
         ]
-
       },
       {
         "name": "SDWANmyapplianceConfig",
