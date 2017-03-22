@@ -157,9 +157,9 @@
       }
     ],
     "outputs": {
-      "vmName": "[basics('Name')]",
-      "adminUsername": "[basics('adminUsername')]",
-      "adminPassword": "[basics('SSHCredentials').password]",
+      "vmName": "[steps('Name')]",
+      "adminUsername": "[steps('adminUsername')]",
+      "adminPassword": "[steps('SSHCredentials').password]",
       "vmSize": "[steps('SDWANmyapplianceConfig').Size]",
       "location": "[location()]",
       "newStorageAccountName" : "[steps('SDWANmyapplianceConfig').storageAccount.name]",
