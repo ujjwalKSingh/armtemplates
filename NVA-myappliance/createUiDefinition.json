@@ -23,12 +23,10 @@
           "name": "SSHCredentials",
           "type": "Microsoft.Compute.CredentialsCombo",
           "label": {
-              "authenticationType": "Authentication type",
               "password": "Password",
               "confirmPassword": "Confirm password"
           },
           "toolTip": {
-              "authenticationType": "Authentication Type for the Linux Virtual Machine",
               "password": "Password for the Virtual Machine"
           },
           "constraints": {
@@ -63,7 +61,6 @@
               "allowedSizes": [
                 "Standard_D3_v2",
                 "Standard_D4_v2",
-                "Standard_DS3_v2",
                 "Standard_DS4_v2"
               ],
               "required": true
@@ -130,7 +127,7 @@
             },
             "subnets": {
                 "subnet1": {
-                    "label": "External facing subnet",
+                    "label": "WAN facing subnet",
                     "constraints": {
                         "minAddressPrefixSize": "/24",
                         "minAddressCount": 12,
@@ -138,7 +135,7 @@
                     }
                 },
                 "subnet2": {
-                    "label": "Internal facing subnet",
+                    "label": "LAN facing subnet",
                     "constraints": {
                         "minAddressPrefixSize": "/24",
                         "minAddressCount": 12,
@@ -162,7 +159,6 @@
       "vmName": "[basics('Name')]",
       "adminUsername": "[basics('adminUsername')]",
       "adminPassword": "[basics('SSHCredentials').password]",
-      "authenticationType" : "[basics('SSHCredentials').authenticationType]",
       "vmSize": "[steps('SDWANmyapplianceConfig').Size]",
       "location": "[location()]",
       "newStorageAccountName" : "[steps('SDWANmyapplianceConfig').storageAccount.name]",
