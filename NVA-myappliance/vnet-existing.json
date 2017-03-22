@@ -5,9 +5,6 @@
     "virtualNetworkName": {
       "type": "string"
     },
-    "location": {
-      "type": "string"
-    },
     "virtualNetworkAddressPrefix": {
       "type": "string"
     },
@@ -44,7 +41,7 @@
         "apiVersion": "2015-06-15",
         "type": "Microsoft.Network/virtualNetworks/subnets",
         "name": "[concat(parameters('virtualNetworkName'),'/',parameters('Subnet1Name'))]",
-        "location": "[parameters('location')]",
+        "location": "[resourceGroup().location]",
         "dependsOn": [
             "[concat('Microsoft.Network/virtualNetworks/',parameters('virtualNetworkName'),'/subnets/',parameters('Subnet1Name'))]"           
         ],
@@ -56,7 +53,7 @@
         "apiVersion": "2015-06-15",
         "type": "Microsoft.Network/virtualNetworks/subnets",
         "name": "[concat(parameters('virtualNetworkName'),'/',parameters('Subnet2Name'))]",
-        "location": "[parameters('location')]",
+        "location": "[resourceGroup().location]",
         "dependsOn": [
             "[concat('Microsoft.Network/virtualNetworks/',parameters('virtualNetworkName'),'/subnets/',parameters('Subnet2Name'))]"           
         ],
@@ -68,7 +65,7 @@
         "apiVersion": "2015-06-15",
         "type": "Microsoft.Network/virtualNetworks/subnets",
         "name": "[concat(parameters('virtualNetworkName'),'/',parameters('Subnet3Name'))]",
-        "location": "[parameters('location')]",
+        "location": "[resourceGroup().location]",
         "dependsOn": [
             "[concat('Microsoft.Network/virtualNetworks/',parameters('virtualNetworkName'),'/subnets/',parameters('Subnet3Name'))]"           
         ],
