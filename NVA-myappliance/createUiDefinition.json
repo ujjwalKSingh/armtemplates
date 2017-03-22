@@ -3,6 +3,9 @@
   "version": "0.0.1-preview",
   "parameters": {
     "basics": [
+
+    ],
+    "steps": [
       {
         "name": "Name",
         "type": "Microsoft.Common.TextBox",
@@ -35,10 +38,8 @@
           "options": {
               "hideConfirmation": false
           },
-          "osPlatform": "Linux"
-      }
-    ],
-    "steps": [
+          "osPlatform": "Windows"
+      },
       {
         "name": "SDWANmyapplianceConfig",
         "label": "SDWAN myappliance settings",
