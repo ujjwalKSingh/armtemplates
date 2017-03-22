@@ -6,39 +6,33 @@
 
     ],
     "steps": [
-      {
-        "name": "Name",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Virtual Machine name",
-        "toolTip": "The name of the Virtual Machine.",
-        "constraints": {
-          "required": true
-        }
-      },
-      {
-        "name": "adminUsername",
-        "type": "Microsoft.Compute.UserNameTextBox",
-        "label": "Username",
-        "toolTip": "Admin username for the virtual machines. The OpsCenter username is 'admin'.",
-        "osPlatform": "Linux"
-      },
-      {
-          "name": "SSHCredentials",
-          "type": "Microsoft.Compute.CredentialsCombo",
-          "label": {
-              "password": "Password",
-              "confirmPassword": "Confirm password"
-          },
-          "toolTip": {
-              "password": "Password for the Virtual Machine"
-          },
-          "constraints": {
+        {
+        "name": "infraConfig",
+        "label": "Administrator settings",
+        "subLabel": {
+          "preValidation": "Configure deployment settings",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "Administrator settings",
+        "elements": [
+          {
+            "name": "Name",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Virtual Machine name",
+            "toolTip": "The name of the Virtual Machine.",
+            "constraints": {
               "required": true
+            }
           },
-          "options": {
-              "hideConfirmation": false
-          },
-          "osPlatform": "Windows"
+          {
+            "name": "adminUsername",
+            "type": "Microsoft.Compute.UserNameTextBox",
+            "label": "Username",
+            "toolTip": "Admin username for the virtual machines. The OpsCenter username is 'admin'.",
+            "osPlatform": "Linux"
+          }         
+        ]
+
       },
       {
         "name": "SDWANmyapplianceConfig",
@@ -157,9 +151,9 @@
       }
     ],
     "outputs": {
-      "vmName": "[steps('Name')]",
-      "adminUsername": "[steps('adminUsername')]",
-      "adminPassword": "[steps('SSHCredentials').password]",
+      "vmName": "[steps('infraConfig').Name]",
+      "adminUsername": "[steps('infraConfig').adminUsername]",
+      "adminPassword": "[steps('infraConfig').SSHCredentials]",
       "vmSize": "[steps('SDWANmyapplianceConfig').Size]",
       "location": "[location()]",
       "newStorageAccountName" : "[steps('SDWANmyapplianceConfig').storageAccount.name]",
