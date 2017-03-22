@@ -2,12 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "location": {
-            "type": "string",
-            "metadata": {
-                "description": "Deployment location"
-            }
-        },
         "virtualNetworkName": {
             "type": "string",
             "defaultValue": "Virtual_Network",
@@ -110,24 +104,6 @@
                 "description": "Password for the Virtual Machine."
             }
         },
-        "sshPublicKey": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "SSH Key for the virtual machines"
-            }
-        },
-        "authenticationType": {
-            "type": "string",
-            "defaultValue": "",
-            "allowedValues": [
-                "password",
-                "sshPublicKey"
-            ],
-            "metadata": {
-                "description": "Authentication Type to chose for the Virtual Machines"
-            }
-        },
         "vmName": {
             "type": "string",
             "defaultValue": "myappliance",
@@ -145,7 +121,9 @@
             "type": "string",
             "defaultValue": "Standard_LRS",
             "allowedValues": [
-                "Standard_LRS"
+                "Standard_LRS",
+                "Standard_GRS",
+                "Premium_LRS"
             ],
             "metadata": {
                 "description": "The type of storage account created."
@@ -201,21 +179,12 @@
                 "description": "Resource Group containing existing public IP"
             }
         },
-        "baseUrl": {
-            "type": "string",
-            "metadata": {
-                "artifactsBaseUrl": "",
-                "description": "URL to acquire other templates"
-            },
-            "defaultValue": "https://raw.githubusercontent.com/reyandap/armtemplates/master/NVA-myappliance"
-        },
         "vmSize" : {
             "type" : "string",
             "defaultValue" : "Standard_D3_v2",
             "allowedValues" : [
               "Standard_D3_v2",
               "Standard_D4_v2",
-              "Standard_DS3_v2",
               "Standard_DS4_v2"
             ],
             "metadata" : {
@@ -234,28 +203,12 @@
         "subnet2Ref": "[concat(variables('vnetID'),'/subnets/', parameters('Subnet2Name'))]",
         "subnet3Ref": "[concat(variables('vnetID'),'/subnets/', parameters('Subnet3Name'))]",
         "nsgname": "[concat(parameters('vmName'),'-SSH-SecurityGroup')]",
-        "apiVer": "2015-05-01-preview",
+        "apiVer": "2015-06-15",
         "publicIPAddressType": "Dynamic",
-        "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
         "storageAccountSetupURL": "[concat(parameters('baseUrl'),'/storageAccount-',parameters('storageAccountNewOrExisting'),'.json')]",
         "publicIPSetupURL": "[concat(parameters('baseUrl'),'/publicip-',parameters('publicIPNewOrExisting'),'.json')]",
         "virtualNetworkSetupURL": "[concat(parameters('baseUrl'),'/vnet-',parameters('vnetNewOrExisting'),'.json')]",
-        "osProfile": "[variables(concat('osprofile',parameters('authenticationType')))]",
-        "osProfilesshPublicKey": {
-            "computername": "[parameters('vmName')]",
-            "adminUsername": "[parameters('adminUsername')]",
-            "linuxConfiguration": {
-                "disablePasswordAuthentication": "true",
-                "ssh": {
-                    "publicKeys": [
-                        {
-                            "path": "[variables('sshKeyPath')]",
-                            "keyData": "[parameters('sshPublicKey')]"
-                        }
-                    ]
-                }
-            }
-        },
+        "osProfile": "[variables(concat('osProfile', 'password')]",
         "osProfilepassword": {
             "computername": "[parameters('vmName')]",
             "adminUsername": "[parameters('adminUsername')]",
@@ -266,7 +219,7 @@
         {
             "name": "SettingUpStorageAccount",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -275,7 +228,7 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "[parameters('location')]"
+                        "value": "[resourceGroup().location]"
                     },
                     "storageAccountType": {
                         "value": "[parameters('storageAccountType')]"
@@ -290,10 +243,10 @@
             }
           },
         {
-          "apiVersion": "[variables('apiVer')]",
+          "apiVersion": "2015-06-15",
           "type": "Microsoft.Network/publicIPAddresses",
           "name": "[parameters('publicIPAddressName')]",
-          "location": "[parameters('location')]",
+          "location": "[resourceGroup().location]",
           "properties": {
                 "publicIPAllocationMethod": "Dynamic",
                 "dnsRecord": {
@@ -304,7 +257,7 @@
         {
             "name": "SettingUpPublicIP",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -313,7 +266,7 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "[parameters('location')]"
+                        "value": "[resourceGroup().location]"
                     },
                     "publicIPAddressName": {
                         "value": "[parameters('publicIPAddressName')]"
@@ -334,17 +287,17 @@
             }
         },
         {
-            "apiVersion": "[variables('apiVer')]",
+            "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[concat(parameters('vmName'),'-SSH-SecurityGroup')]",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "properties": {
                 "securityRules": [
                     {
                         "name": "UDP-Rule1",
                         "properties": {
                             "description": "Allow UDP",
-                            "protocol": "UDP",
+                            "protocol": "Udp",
                             "sourcePortRange": "4980",
                             "destinationPortRange": "4980",
                             "sourceAddressPrefix": "*",
@@ -358,7 +311,7 @@
                         "name": "UDP-Rule2",
                         "properties": {
                             "description": "Allow UDP",
-                            "protocol": "UDP",
+                            "protocol": "Udp",
                             "sourcePortRange": "4980",
                             "destinationPortRange": "4980",
                             "sourceAddressPrefix": "*",
@@ -374,7 +327,7 @@
         {
             "name": "SettingUpVirtualNetwork",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -386,7 +339,7 @@
                         "value": "[parameters('virtualNetworkName')]"
                     },
                     "location": {
-                        "value": "[parameters('location')]"
+                        "value": "[resourceGroup().location]"
                     },
                     "virtualNetworkAddressPrefix": {
                         "value": "[parameters('virtualNetworkAddressPrefix')]"
@@ -416,10 +369,10 @@
             }
         },
         {
-            "apiVersion": "[variables('apiVer')]",
+            "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[concat(parameters('vmName'),'-Nic0')]",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Resources/deployments/', 'SettingUpVirtualNetwork')]",
                 "[concat('Microsoft.Network/networkSecurityGroups/',variables('nsgname'))]",
@@ -448,10 +401,10 @@
               }
         },
         {
-            "apiVersion": "[variables('apiVer')]",
+            "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[concat(parameters('vmName'),'-Nic1')]",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Resources/deployments/', 'SettingUpVirtualNetwork')]"
             ],
@@ -472,10 +425,10 @@
             }
         },
         {
-            "apiVersion": "[variables('apiVer')]",
+            "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[concat(parameters('vmName'),'-Nic2')]",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Resources/deployments/', 'SettingUpVirtualNetwork')]"
             ],
@@ -496,10 +449,10 @@
             }
         },
         {
-            "apiVersion": "[variables('apiVer')]",
+            "apiVersion": "2015-06-15",
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[parameters('vmName')]",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "plan": {
                 "name": "SDWAN_name",
                 "publisher": "citrix",
@@ -556,7 +509,7 @@
                 },
                 "diagnosticsProfile": {
                     "bootDiagnostics": {
-                        "enabled": "true",
+                        "enabled": true,
                         "storageUri": "[concat('http://',parameters('newStorageAccountName'),'.blob.core.windows.net')]"
                     }
                 }
