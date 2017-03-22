@@ -122,7 +122,7 @@
             },
             "subnets": {
                 "subnet1": {
-                    "label": "WAN facing subnet",
+                    "label": "WAN subnet",
                     "constraints": {
                         "minAddressPrefixSize": "/24",
                         "minAddressCount": 12,
@@ -130,7 +130,7 @@
                     }
                 },
                 "subnet2": {
-                    "label": "LAN facing subnet",
+                    "label": "LAN subnet",
                     "constraints": {
                         "minAddressPrefixSize": "/24",
                         "minAddressCount": 12,
@@ -173,7 +173,10 @@
       "Subnet3Name" : "[steps('SDWANmyapplianceConfig').virtualNetwork.subnets.subnet3.name]",
       "Subnet3Prefix" : "[steps('SDWANmyapplianceConfig').virtualNetwork.subnets.subnet3.addressPrefix]",
       "vnetNewOrExisting" : "[steps('SDWANmyapplianceConfig').virtualNetwork.newOrExisting]",
-      "virtualNetworkExistingRGName" : "[steps('SDWANmyapplianceConfig').virtualNetwork.resourceGroup]"
+      "virtualNetworkExistingRGName" : "[steps('SDWANmyapplianceConfig').virtualNetwork.resourceGroup]",
+      "subnet1StartAddress" : "[steps('SDWANmyapplianceConfig').virtualNetwork.subnets.subnet1.startAddress]",
+      "subnet2StartAddress" : "[steps('SDWANmyapplianceConfig').virtualNetwork.subnets.subnet2.startAddress]",
+      "subnet3StartAddress" : "[steps('SDWANmyapplianceConfig').virtualNetwork.subnets.subnet3.startAddress]"
     }
   }
 }
